@@ -1,0 +1,3 @@
+# Photo NotesDeveloped by Xiaoyuan Lai, in May 2016 for the class COEN268 project 3.This app is a simple note-taking app that allows you to take a photo and associate a caption for each picture.
+
+If run in emulator, need to enable Webcam optionThis app uses CursorAdaptor to link SQLite database and ListViewImage files are stored under /storage/emulated/0Thumbnails used in the main activityThe “ADD” button goes to “Add Photo” activity first before it goes to camera picture captureImpletemented 6.0 run-time permission request and set also set targetSDK to 22 in build.gradle fileSupport both landscape mode and portrait mode
