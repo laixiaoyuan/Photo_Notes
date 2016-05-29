@@ -70,13 +70,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         toastShow("View Photo Detail : ");
-        String photoFileName = cursor.getString(cursor.getColumnIndex("fileName"));
+        String photoFileName = cursor.getString(cursor.getColumnIndex("photoFileName"));
         String photoCaption = cursor.getString(cursor.getColumnIndex("caption"));
+        String audioFileName = cursor.getString(cursor.getColumnIndex("audioFileName"));
 
         Intent intent = new Intent(MainActivity.this, ViewPhoto.class);
         Bundle bundle = new Bundle();
         bundle.putString("photoFileName", photoFileName);
         bundle.putString("photoCaption", photoCaption);
+        bundle.putString("audioFileName", audioFileName);
         intent.putExtras(bundle);
         startActivity(intent);
     }

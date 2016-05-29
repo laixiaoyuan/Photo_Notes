@@ -27,11 +27,11 @@ public class NoteAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        String fileName = cursor.getString(cursor.getColumnIndex("thumbFile"));
+        String thumbFileName = cursor.getString(cursor.getColumnIndex("thumbFile"));
         String note = cursor.getString(cursor.getColumnIndex("caption"));
 
         ((TextView)view.findViewById(R.id.txtNote)).setText(note);
-        ((ImageView)view.findViewById(R.id.icon)).setImageURI(Uri.parse(fileName));
+        ((ImageView)view.findViewById(R.id.icon)).setImageURI(Uri.parse(thumbFileName));
 
     }
 }

@@ -16,13 +16,14 @@ public class NoteDbHelper extends SQLiteOpenHelper {
     static private final String DB_NAME="Photo-Notes-CursorAdaptor.db";
 
     static private final String SQL_CREATE_TABLE =
-            "CREATE TABLE contact (" +
+            "CREATE TABLE noteInfo (" +
                     "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "  fileName TEXT," +
+                    "  photoFileName TEXT," +
+                    "  audioFileName TEXT," +
                     "  thumbFile TEXT," +
                     "  caption TEXT);";
 
-    static private final String SQL_DROP_TABLE = "DROP TABLE contact";
+    static private final String SQL_DROP_TABLE = "DROP TABLE noteInfo";
 
     Context context;
 
@@ -47,7 +48,7 @@ public class NoteDbHelper extends SQLiteOpenHelper {
 
     public int getMaxRecID() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT MAX(_id) FROM contact;", null);
+        Cursor cursor = db.rawQuery("SELECT MAX(_id) FROM noteInfo;", null);
 
         if (cursor.getCount() == 0) {
             return 0;
@@ -59,38 +60,20 @@ public class NoteDbHelper extends SQLiteOpenHelper {
 
     public Cursor fetchAll() {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM contact;", null);
+        return db.rawQuery("SELECT * FROM noteInfo;", null);
     }
 
     public void add(NoteInfo noteInfo) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("thumbFile", noteInfo.thumbFile);
-        contentValues.put("fileName", noteInfo.fileName);
+        contentValues.put("photoFileName", noteInfo.photoFileName);
         contentValues.put("caption", noteInfo.caption);
+        contentValues.put("audioFileName", noteInfo.audioFileName);
 
 
-        db.insert("contact", null, contentValues);
+        db.insert("noteInfo", null, contentValues);
 
-        /*
-        String SQL_ADD =
-                "INSERT INTO contact (name, surname, email, phone) VALUES ('"
-                + ci.name + "', '"
-                + ci.surname + "', '"
-                + ci.email + "', '"
-                + ci.phone +"');";
-        db.execSQL(SQL_ADD);
-        */
     }
-
-//    public void delete(int id) {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        db.delete("contact", "_id=?", new String[]{String.valueOf(id)});
-//
-//        /*
-//        String SQL_DELETE="DELETE FROM contact WHERE _id=" + id + ";";
-//        db.execSQL(SQL_DELETE);
-//         */
-//    }
 }
 

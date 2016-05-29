@@ -24,37 +24,63 @@
             android:layout_alignParentStart="true">
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal">
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-                <Button
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/addButton"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:text="Add Photo"
                     android:layout_gravity="center_horizontal"
-                    android:layout_weight="1" />
+                    android:gravity="center_horizontal">
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2" />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/addButton"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="Camera"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1" />
 
-                <Button
-                    android:layout_width="wrap_content"
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/saveButton"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="Save"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/saveButton"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:text="Save"
+                    android:layout_weight="1"
                     android:layout_gravity="center_horizontal"
-                    android:layout_weight="1" />
+                    android:gravity="center_horizontal">
 
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Record"
+                        android:id="@+id/recordButton"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Play"
+                        android:id="@+id/playbackButton"
+                        android:layout_gravity="right"
+                        android:layout_weight="1" />
+                </LinearLayout>
             </LinearLayout>
 
             <ImageView
@@ -70,14 +96,9 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/textCaption"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
                 android:hint="Enter Your Caption Here"
-                android:layout_marginTop="20dp"
-                android:editable="true" />
+                android:layout_marginTop="20dp" />
+
         </LinearLayout>
     </ScrollView>
 
