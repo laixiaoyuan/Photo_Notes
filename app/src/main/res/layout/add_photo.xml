@@ -33,6 +33,7 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal">
 
@@ -43,33 +44,28 @@
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
                         android:text="Camera"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_weight="1" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal">
+                        android:layout_weight="1"
+                        android:background="@color/for_camera"
+                        android:layout_margin="5dp" />
 
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Record"
-                        android:id="@+id/recordButton"
-                        android:layout_weight="1" />
+                        android:text="Draw"
+                        android:id="@+id/drawButton"
+                        android:layout_weight="1"
+                        android:background="@color/for_draw"
+                        android:layout_margin="5dp" />
 
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Play"
-                        android:id="@+id/playbackButton"
-                        android:layout_gravity="right"
-                        android:layout_weight="1" />
+                        android:text="Clear"
+                        android:id="@+id/clearButton"
+                        android:layout_weight="1"
+                        android:background="@color/for_draw"
+                        android:layout_margin="5dp" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -81,25 +77,20 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Draw"
-                        android:id="@+id/drawButton"
-                        android:layout_weight="1" />
+                        android:text="Record"
+                        android:id="@+id/recordButton"
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:background="@color/for_record" />
 
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Clear"
-                        android:id="@+id/clearButton"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
+                        android:text="Play"
+                        android:id="@+id/playbackButton"
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:background="@color/for_record" />
 
                     <Button
                         android:layout_width="wrap_content"
@@ -108,20 +99,12 @@
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
                         android:text="Save"
-                        android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
-                        android:background="@android:color/holo_orange_dark" />
+                        android:background="@color/highlighted_text_material_dark"
+                        android:layout_margin="5dp" />
                 </LinearLayout>
+
             </LinearLayout>
-
-
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:id="@+id/addedPhoto"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -130,6 +113,13 @@
                 android:id="@+id/textCaption"
                 android:hint="Enter Your Caption Here"
                 android:layout_marginTop="10dp" />
+
+            <edu.xlaiscu.photonoteslistviewversion.TouchDrawView
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:id="@+id/myview"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
         </LinearLayout>
     </ScrollView>

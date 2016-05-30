@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -174,17 +175,8 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
             }
         });
 
-        final Button drawButton = (Button) findViewById(R.id.drawButton);
-        drawButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent drawPicIntent = new Intent(AddPhoto.this, PictureDraw.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("photoFileName", fileName);
-                drawPicIntent.putExtras(bundle);
-                startActivity(drawPicIntent);
-            }
-        });
+
+
 
     }
 
@@ -193,8 +185,36 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode != 1234 || resultCode != RESULT_OK) return;
 
-        ImageView imageView = (ImageView) findViewById(R.id.addedPhoto);
-        imageView.setImageURI(Uri.parse(fileName));
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeFile(fileName.substring(8), options);
+        int screenWidth = DeviceDimensionsHelper.getDisplayWidth(getApplicationContext());
+        BitmapScaler.scaleToFitWidth(bitmap, screenWidth);
+        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+
+        final TouchDrawView view = (TouchDrawView) findViewById(R.id.myview);
+
+        view.setBackground(drawable);
+
+        final Button drawButton = (Button) findViewById(R.id.drawButton);
+
+        drawButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                view.drawable = true;
+                if (view == null) {
+                    Log.e("draw_on_picture", "we have a problem");
+                }
+
+                // Clear picture
+                ((Button) findViewById(R.id.clearButton)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.clear();
+                    }
+                });
+            }
+        });
 
 
     }

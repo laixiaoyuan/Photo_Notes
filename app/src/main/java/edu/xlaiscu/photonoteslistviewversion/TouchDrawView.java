@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
 public class TouchDrawView extends ImageView {
     Paint paint = new Paint();
     List<Point> points = new ArrayList<>();
-
+    boolean drawable = false;
     public TouchDrawView(Context context) {
         super(context);
         paint.setColor(Color.RED);
@@ -34,6 +35,10 @@ public class TouchDrawView extends ImageView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (drawable == false){
+            return true;
+        }
+
         Point point = new Point();
         point.x = (int)event.getX();
         point.y = (int)event.getY();
@@ -47,9 +52,11 @@ public class TouchDrawView extends ImageView {
 
     @Override
     public void onDraw(Canvas canvas) {
+        getParent().requestDisallowInterceptTouchEvent(true);
+
         for (Point point : points) {
             canvas.drawCircle(point.x, point.y, 5, paint);
-//            canvas.drawBitmap(bitmap, 0, 0, paint);
+
         }
 
     }
