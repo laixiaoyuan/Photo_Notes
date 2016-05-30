@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * Created by Lexie on 5/29/16.
  */
-public class TouchDrawView extends View {
+public class TouchDrawView extends ImageView {
     Paint paint = new Paint();
     List<Point> points = new ArrayList<>();
 

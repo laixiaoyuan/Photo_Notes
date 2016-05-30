@@ -114,17 +114,12 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <net.junsun.l19_custom_view.TouchDrawView
-                android:layout_width="match_parent"
-                android:layout_height="309dp"
-                android:id="@+id/myview"
-                android:layout_gravity="right"
-                android:layout_marginTop="10dp" />
+
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/addedPhoto"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1" />
 

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -55,6 +56,9 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
     private MediaRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
 
+    // Draw on top of picture
+    Canvas canvas;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +106,6 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
         mFileName += "/audiorecordtest.3gp";
 
         final Button recordButton = (Button) findViewById(R.id.recordButton);
-//        recordButton.setText("Start Recording");
         recordButton.setOnClickListener(new View.OnClickListener() {
             boolean mStartRecording = true;
             @Override
@@ -140,7 +143,6 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
 
 
 
-
         // Save note
         final Button saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -172,6 +174,17 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
             }
         });
 
+        final Button drawButton = (Button) findViewById(R.id.drawButton);
+        drawButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent drawPicIntent = new Intent(AddPhoto.this, PictureDraw.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("photoFileName", fileName);
+                drawPicIntent.putExtras(bundle);
+                startActivity(drawPicIntent);
+            }
+        });
 
     }
 
@@ -183,20 +196,7 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
         ImageView imageView = (ImageView) findViewById(R.id.addedPhoto);
         imageView.setImageURI(Uri.parse(fileName));
 
-        final TouchDrawView view;
-        view = (TouchDrawView) findViewById(R.id.myview);
-        if (view == null) {
-            Log.e("draw_on_picture", "we have a problem");
-        }
 
-        // Clear picture
-        final Button clearButton = (Button) findViewById(R.id.clearButton);
-        clearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                view.clear();
-            }
-        });
     }
 
     @Override
