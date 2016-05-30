@@ -36,6 +36,8 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -142,42 +144,6 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
         });
 
 
-
-
-        // Save note
-        final Button saveButton = (Button) findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (fileName == null) {
-                    Toast.makeText(getApplicationContext(), "You have to take a picture!", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    NoteInfo ni = new NoteInfo();
-                    ni.photoFileName = fileName;
-
-                    String thumbFile = getOutputFileName()[1];
-                    Thumbify.generateThumbnail(fileName, thumbFile);
-                    ni.thumbFile = thumbFile;
-
-                    EditText vCaption = (EditText) findViewById(R.id.textCaption);
-                    ni.caption = vCaption.getText().toString();
-
-                    ni.audioFileName = mFileName;
-
-                    dbHelper.add(ni);
-                    cursor.requery();
-                    na.notifyDataSetChanged();
-
-                    Intent returnIntent = new Intent(AddPhoto.this, MainActivity.class);
-                    startActivity(returnIntent);
-                }
-            }
-        });
-
-
-
-
     }
 
     // preview picture and draw
@@ -216,6 +182,45 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
             }
         });
 
+        // Save note
+        final Button saveButton = (Button) findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (fileName == null) {
+                    Toast.makeText(getApplicationContext(), "You have to take a picture!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    NoteInfo ni = new NoteInfo();
+
+                    String thumbFile = getOutputFileName()[1];
+                    Thumbify.generateThumbnail(fileName, thumbFile);
+                    ni.thumbFile = thumbFile;
+
+                    String newFileName = fileName;
+                    view.setDrawingCacheEnabled(true);
+                    Bitmap drawingBitmap = view.getDrawingCache();
+                    try {
+                        drawingBitmap.compress(Bitmap.CompressFormat.JPEG, 95, new FileOutputStream(newFileName));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    ni.photoFileName = newFileName;
+
+                    EditText vCaption = (EditText) findViewById(R.id.textCaption);
+                    ni.caption = vCaption.getText().toString();
+
+                    ni.audioFileName = mFileName;
+
+                    dbHelper.add(ni);
+                    cursor.requery();
+                    na.notifyDataSetChanged();
+
+                    Intent returnIntent = new Intent(AddPhoto.this, MainActivity.class);
+                    startActivity(returnIntent);
+                }
+            }
+        });
 
     }
 
