@@ -47,7 +47,12 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
     private int maxRecId;
     final int requestCode = 1234;
     final String albumName = "photonoteslistviewversion";
+
     String fileName;
+    String standardFileName;
+    String thumbFileName;
+    String newFileName;
+
     String caption;
     NoteAdapter na;
     NoteDbHelper dbHelper;
@@ -95,8 +100,9 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
                     return;
                 }
 
-                fileName = getOutputFileName()[0];
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse(fileName));
+                fileName = getOutputFileName();
+                standardFileName = fileName + ".bmp";
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse(standardFileName));
 
                 startActivityForResult(cameraIntent, 1234);
 
@@ -153,7 +159,7 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = BitmapFactory.decodeFile(fileName.substring(8), options);
+        Bitmap bitmap = BitmapFactory.decodeFile(standardFileName.substring(8), options);
         int screenWidth = DeviceDimensionsHelper.getDisplayWidth(getApplicationContext());
         BitmapScaler.scaleToFitWidth(bitmap, screenWidth);
         Drawable drawable = new BitmapDrawable(getResources(), bitmap);
@@ -187,23 +193,29 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fileName == null) {
+                if (standardFileName == null) {
                     Toast.makeText(getApplicationContext(), "You have to take a picture!", Toast.LENGTH_LONG).show();
                 }
                 else {
                     NoteInfo ni = new NoteInfo();
+                    thumbFileName = fileName + "_thumb.bmp";
 
-                    String thumbFile = getOutputFileName()[1];
-                    Thumbify.generateThumbnail(fileName, thumbFile);
-                    ni.thumbFile = thumbFile;
+                    Thumbify.generateThumbnail(standardFileName, thumbFileName);
+                    ni.thumbFile = thumbFileName;
 
-                    String newFileName = fileName;
-                    view.setDrawingCacheEnabled(true);
-                    Bitmap drawingBitmap = view.getDrawingCache();
+                    newFileName = fileName + "_draw.jpg";
+
                     try {
-                        drawingBitmap.compress(Bitmap.CompressFormat.JPEG, 95, new FileOutputStream(newFileName));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+
+                        view.setDrawingCacheEnabled(true);
+                        Bitmap drawingBitmap = view.getDrawingCache();
+                        FileOutputStream fo = new FileOutputStream(newFileName.substring(7));
+
+                        drawingBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fo);
+                        fo.flush();
+                        fo.close();
+                    }catch (IOException e) {
+                        Log.e("fo","fo failed");
                     }
                     ni.photoFileName = newFileName;
 
@@ -230,8 +242,7 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
     }
 
 
-    private String[] getOutputFileName() {
-        String[] normalAndThumb = new String[2];
+    private String getOutputFileName() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String filenamePart =
                 "file://"
@@ -239,13 +250,7 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
                         + "/JPEG_"
                         + timeStamp;
 
-        String normalFile = filenamePart + ".bmp";
-        String thumFile = filenamePart + "_thumb.bmp";
-
-        normalAndThumb[0] = normalFile;
-        normalAndThumb[1] = thumFile;
-
-        return normalAndThumb;
+        return filenamePart;
     }
 
     private void startRecording() {

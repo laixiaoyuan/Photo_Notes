@@ -34,6 +34,8 @@ public class ViewPhoto extends AppCompatActivity implements MediaPlayer.OnComple
 
         Bundle bundle = getIntent().getExtras();
         String photoFileName = bundle.getString("photoFileName");
+
+
         String caption = bundle.getString("photoCaption");
         final String audioFileName = bundle.getString("audioFileName");
 
