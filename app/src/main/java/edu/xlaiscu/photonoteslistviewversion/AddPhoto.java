@@ -73,7 +73,7 @@ public class AddPhoto extends AppCompatActivity implements
 
     // Audio Recording part
     private static final String LOG_TAG = "AudioRecordTest";
-    private static String mFileName = null;
+    private String mFileName = null;
     private MediaRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
 
@@ -156,6 +156,7 @@ public class AddPhoto extends AppCompatActivity implements
 
         });
 
+
         // Audio Recording
         String mFileNamePart = Environment.getExternalStorageDirectory().getAbsolutePath();
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -164,6 +165,9 @@ public class AddPhoto extends AppCompatActivity implements
 
         final Button recordButton = (Button) findViewById(R.id.recordButton);
         recordButton.setOnClickListener(new View.OnClickListener() {
+
+
+
             boolean mStartRecording = true;
             @Override
             public void onClick(View v) {
@@ -315,7 +319,7 @@ public class AddPhoto extends AppCompatActivity implements
 
     private void displayAcceleration() {
         float accel = Math.abs(mAccel);
-        if (accel > 1.5f) {
+        if (accel > 1.0f) {
             touchDrawView.clear();
         }
     }

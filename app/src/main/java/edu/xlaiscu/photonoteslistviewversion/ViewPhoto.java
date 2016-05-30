@@ -30,7 +30,6 @@ public class ViewPhoto extends AppCompatActivity implements MediaPlayer.OnComple
     double lat;
     double lng;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +70,8 @@ public class ViewPhoto extends AppCompatActivity implements MediaPlayer.OnComple
                     mediaPlayer.start();
                 }
                 catch (IOException e) {
-                    Log.e("AudioRecordTest", "prepare() failed");
+                    Toast.makeText(getApplicationContext(), "No audio recorded for this note", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
