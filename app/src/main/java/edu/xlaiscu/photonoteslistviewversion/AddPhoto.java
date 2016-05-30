@@ -77,7 +77,7 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
         na = new NoteAdapter(this, cursor, 0);
 
 
-        // photo taking part
+        // photo taking
         final Button addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +97,7 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
 
         });
 
-        // Audio Recording part
+        // Audio Recording
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         mFileName += "/audiorecordtest.3gp";
 
@@ -119,6 +119,7 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
             }
         });
 
+        // Audio playback
         final Button playButton = (Button) findViewById(R.id.playbackButton);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +137,11 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
             }
         });
 
+
+
+
+
+        // Save note
         final Button saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,12 +175,28 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
 
     }
 
+    // preview picture and draw
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode != 1234 || resultCode != RESULT_OK) return;
 
         ImageView imageView = (ImageView) findViewById(R.id.addedPhoto);
         imageView.setImageURI(Uri.parse(fileName));
+
+        final TouchDrawView view;
+        view = (TouchDrawView) findViewById(R.id.myview);
+        if (view == null) {
+            Log.e("draw_on_picture", "we have a problem");
+        }
+
+        // Clear picture
+        final Button clearButton = (Button) findViewById(R.id.clearButton);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                view.clear();
+            }
+        });
     }
 
     @Override

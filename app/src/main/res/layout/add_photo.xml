@@ -46,16 +46,6 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1" />
 
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/saveButton"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:text="Save"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_weight="1" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -81,6 +71,47 @@
                         android:layout_gravity="right"
                         android:layout_weight="1" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Draw"
+                        android:id="@+id/drawButton"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Clear"
+                        android:id="@+id/clearButton"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/saveButton"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="Save"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:background="@android:color/holo_orange_dark" />
+                </LinearLayout>
             </LinearLayout>
 
             <net.junsun.l19_custom_view.TouchDrawView
@@ -89,6 +120,13 @@
                 android:id="@+id/myview"
                 android:layout_gravity="right"
                 android:layout_marginTop="10dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1" />
 
             <EditText
                 android:layout_width="match_parent"

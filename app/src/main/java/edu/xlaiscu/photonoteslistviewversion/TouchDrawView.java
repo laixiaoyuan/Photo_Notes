@@ -1,6 +1,7 @@
 package edu.xlaiscu.photonoteslistviewversion;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -47,7 +48,9 @@ public class TouchDrawView extends View {
     public void onDraw(Canvas canvas) {
         for (Point point : points) {
             canvas.drawCircle(point.x, point.y, 5, paint);
+//            canvas.drawBitmap(bitmap, 0, 0, paint);
         }
+
     }
 
     public void clear() {
