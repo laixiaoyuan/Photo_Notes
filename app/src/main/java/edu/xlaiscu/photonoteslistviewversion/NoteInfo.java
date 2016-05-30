@@ -8,6 +8,8 @@ public class NoteInfo {
     protected String thumbFile;
     protected String caption;
     protected String audioFileName;
+    protected double lat;
+    protected double lng;
 
 
 }

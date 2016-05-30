@@ -28,10 +28,17 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBcDFmSAfrrC4Ax3UzVmLtUYdvSRuksoFY" />
+o
         <activity android:name=".AddPhoto" />
         <activity android:name=".ViewPhoto" />
-        <activity android:name=".PictureDraw"></activity>
+        <activity
+            android:name=".MapView"
+            android:label="Map">
+
+        </activity>
     </application>
 
 </manifest>

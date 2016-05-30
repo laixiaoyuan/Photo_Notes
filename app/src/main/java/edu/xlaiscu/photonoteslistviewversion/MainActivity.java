@@ -73,12 +73,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String photoFileName = cursor.getString(cursor.getColumnIndex("photoFileName"));
         String photoCaption = cursor.getString(cursor.getColumnIndex("caption"));
         String audioFileName = cursor.getString(cursor.getColumnIndex("audioFileName"));
+        double lat = cursor.getDouble(cursor.getColumnIndex("latitude"));
+        double lng = cursor.getDouble(cursor.getColumnIndex("longitude"));
 
         Intent intent = new Intent(MainActivity.this, ViewPhoto.class);
         Bundle bundle = new Bundle();
         bundle.putString("photoFileName", photoFileName);
         bundle.putString("photoCaption", photoCaption);
         bundle.putString("audioFileName", audioFileName);
+        bundle.putDouble("lat", lat);
+        bundle.putDouble("lng", lng);
         intent.putExtras(bundle);
         startActivity(intent);
     }

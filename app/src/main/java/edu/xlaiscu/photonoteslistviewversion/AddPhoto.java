@@ -15,6 +15,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -35,7 +36,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.w3c.dom.Text;
 
@@ -48,7 +54,9 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnCompletionListener, SensorEventListener{
+public class AddPhoto extends AppCompatActivity implements
+        MediaPlayer.OnCompletionListener, SensorEventListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private int maxRecId;
     final int requestCode = 1234;
     final String albumName = "photonoteslistviewversion";
@@ -79,6 +87,12 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
     private float mAccelCurrent; // current acceleration including gravity
     private float mAccelLast; // last acceleration including gravity
 
+    // location recording
+    GoogleApiClient mGoogleApiClient = null;
+    Location mLastLocation;
+    double latLocation;
+    double lngLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +120,15 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
+        // location
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+
+        }
+
 
         // photo taking
         final Button addButton = (Button) findViewById(R.id.addButton);
@@ -123,6 +146,11 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse(standardFileName));
 
                 startActivityForResult(cameraIntent, 1234);
+
+
+                // get location
+                latLocation = mLastLocation.getLatitude();
+                lngLocation = mLastLocation.getLongitude();
 
             }
 
@@ -242,6 +270,9 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
 
                     ni.audioFileName = mFileName;
 
+                    ni.lat = latLocation;
+                    ni.lng = lngLocation;
+
                     dbHelper.add(ni);
                     cursor.requery();
                     na.notifyDataSetChanged();
@@ -291,6 +322,39 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
     public void onCompletion(MediaPlayer mp) {
         Toast.makeText(getApplicationContext(), "playback is completed", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        toast("onConnected() is called");
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        toast("onConnectionSuspended() is called : i=" + i);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        toast("onConnectionFailed() is called");
+    }
+
+    void toast(String msg) {
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
 
 
     private String getOutputFileName() {

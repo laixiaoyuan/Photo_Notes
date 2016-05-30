@@ -1,6 +1,7 @@
 package edu.xlaiscu.photonoteslistviewversion;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
@@ -15,9 +16,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.IOException;
 
 public class ViewPhoto extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
+
+    NoteDbHelper dbHelper;
+    Cursor cursor;
+    double lat;
+    double lng;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +46,8 @@ public class ViewPhoto extends AppCompatActivity implements MediaPlayer.OnComple
 
         Bundle bundle = getIntent().getExtras();
         String photoFileName = bundle.getString("photoFileName");
-
-
+        lat = bundle.getDouble("lat");
+        lng = bundle.getDouble("lng");
         String caption = bundle.getString("photoCaption");
         final String audioFileName = bundle.getString("audioFileName");
 
@@ -45,6 +57,8 @@ public class ViewPhoto extends AppCompatActivity implements MediaPlayer.OnComple
         captionText.setText(caption);
         photoFileNameText.setImageURI(Uri.parse(photoFileName));
 
+
+        // audio playback button
         ImageButton audioPlay = (ImageButton) findViewById(R.id.playBtnIcon);
         audioPlay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +73,25 @@ public class ViewPhoto extends AppCompatActivity implements MediaPlayer.OnComple
                 catch (IOException e) {
                     Log.e("AudioRecordTest", "prepare() failed");
                 }
+            }
+        });
+
+        // location button
+        dbHelper = new NoteDbHelper(this);
+        cursor = dbHelper.fetchAll();
+
+        ImageButton locationShow = (ImageButton) findViewById(R.id.mapButton);
+        locationShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(ViewPhoto.this, MapView.class);
+                Bundle bundle = new Bundle();
+                bundle.putDouble("lat", lat);
+                bundle.putDouble("lng", lng);
+
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 

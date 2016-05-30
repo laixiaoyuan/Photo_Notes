@@ -21,6 +21,8 @@ public class NoteDbHelper extends SQLiteOpenHelper {
                     "  photoFileName TEXT," +
                     "  audioFileName TEXT," +
                     "  thumbFile TEXT," +
+                    "  latitude DOUBLE," +
+                    "  longitude DOUBLE," +
                     "  caption TEXT);";
 
     static private final String SQL_DROP_TABLE = "DROP TABLE noteInfo";
@@ -70,6 +72,8 @@ public class NoteDbHelper extends SQLiteOpenHelper {
         contentValues.put("photoFileName", noteInfo.photoFileName);
         contentValues.put("caption", noteInfo.caption);
         contentValues.put("audioFileName", noteInfo.audioFileName);
+        contentValues.put("latitude", noteInfo.lat);
+        contentValues.put("longitude", noteInfo.lng);
 
 
         db.insert("noteInfo", null, contentValues);
