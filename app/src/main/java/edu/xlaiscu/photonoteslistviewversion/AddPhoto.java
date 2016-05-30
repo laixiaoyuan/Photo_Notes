@@ -2,6 +2,7 @@ package edu.xlaiscu.photonoteslistviewversion;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -10,6 +11,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -43,7 +48,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnCompletionListener{
+public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnCompletionListener, SensorEventListener{
     private int maxRecId;
     final int requestCode = 1234;
     final String albumName = "photonoteslistviewversion";
@@ -66,6 +71,13 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
 
     // Draw on top of picture
     Canvas canvas;
+    TouchDrawView touchDrawView;
+
+    // sensor manager
+    private SensorManager mSensorManager;
+    private float mAccel; // acceleration apart from gravity
+    private float mAccelCurrent; // current acceleration including gravity
+    private float mAccelLast; // last acceleration including gravity
 
 
     @Override
@@ -87,6 +99,12 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
         dbHelper = new NoteDbHelper(this);
         cursor = dbHelper.fetchAll();
         na = new NoteAdapter(this, cursor, 0);
+
+        // sensor manager
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccel = 0.00f;
+        mAccelCurrent = SensorManager.GRAVITY_EARTH;
+        mAccelLast = SensorManager.GRAVITY_EARTH;
 
 
         // photo taking
@@ -164,17 +182,17 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
         BitmapScaler.scaleToFitWidth(bitmap, screenWidth);
         Drawable drawable = new BitmapDrawable(getResources(), bitmap);
 
-        final TouchDrawView view = (TouchDrawView) findViewById(R.id.myview);
+        touchDrawView = (TouchDrawView) findViewById(R.id.myview);
 
-        view.setBackground(drawable);
+        touchDrawView.setBackground(drawable);
 
         final Button drawButton = (Button) findViewById(R.id.drawButton);
 
         drawButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                view.drawable = true;
-                if (view == null) {
+                touchDrawView.drawable = true;
+                if (touchDrawView == null) {
                     Log.e("draw_on_picture", "we have a problem");
                 }
 
@@ -182,7 +200,7 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
                 ((Button) findViewById(R.id.clearButton)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        view.clear();
+                        touchDrawView.clear();
                     }
                 });
             }
@@ -207,8 +225,8 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
 
                     try {
 
-                        view.setDrawingCacheEnabled(true);
-                        Bitmap drawingBitmap = view.getDrawingCache();
+                        touchDrawView.setDrawingCacheEnabled(true);
+                        Bitmap drawingBitmap = touchDrawView.getDrawingCache();
                         FileOutputStream fo = new FileOutputStream(newFileName.substring(7));
 
                         drawingBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fo);
@@ -234,6 +252,39 @@ public class AddPhoto extends AppCompatActivity implements MediaPlayer.OnComplet
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        mSensorManager.unregisterListener(this);
+        super.onPause();
+    }
+
+    public void onSensorChanged(SensorEvent se) {
+        float x = se.values[0];
+        float y = se.values[1];
+        float z = se.values[2];
+        mAccelLast = mAccelCurrent;
+        mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
+        float delta = mAccelCurrent - mAccelLast;
+        mAccel = mAccel * 0.9f + delta * 0.1f; // perform low-cut filter
+
+        displayAcceleration();
+    }
+
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+
+    private void displayAcceleration() {
+        float accel = Math.abs(mAccel);
+        if (accel > 1.5f) {
+            touchDrawView.clear();
+        }
     }
 
     @Override
