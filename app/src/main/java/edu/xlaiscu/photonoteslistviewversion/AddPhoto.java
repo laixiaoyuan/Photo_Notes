@@ -141,7 +141,7 @@ public class AddPhoto extends AppCompatActivity implements
                     return;
                 }
 
-                fileName = getOutputFileName();
+                fileName = getPicOutputFileName();
                 standardFileName = fileName + ".bmp";
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse(standardFileName));
 
@@ -157,8 +157,10 @@ public class AddPhoto extends AppCompatActivity implements
         });
 
         // Audio Recording
-        mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        mFileName += "/audiorecordtest.3gp";
+        String mFileNamePart = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        mFileName = mFileNamePart + "/" + timeStamp + ".3gp";
 
         final Button recordButton = (Button) findViewById(R.id.recordButton);
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -356,8 +358,7 @@ public class AddPhoto extends AppCompatActivity implements
     }
 
 
-
-    private String getOutputFileName() {
+    private String getPicOutputFileName() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String filenamePart =
                 "file://"
@@ -367,6 +368,7 @@ public class AddPhoto extends AppCompatActivity implements
 
         return filenamePart;
     }
+
 
     private void startRecording() {
         mRecorder = new MediaRecorder();
