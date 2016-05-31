@@ -21,6 +21,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -31,6 +32,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -100,6 +102,18 @@ public class AddPhoto extends AppCompatActivity implements
         setContentView(R.layout.add_photo);
 
         acquireRunTimePermissions();
+
+        // floating action button
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabGoTop);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toast("Go to top ...");
+                ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
+
+            }
+        });
 
         // action bar
 
